@@ -1,7 +1,7 @@
 package main
 
-
 import "fmt"
+
 /*places now created:
 	Shops--buy:
 		MainShop
@@ -23,30 +23,32 @@ type Visitor1 interface{
 	BuyInSideShop(s *SideShop) string
 	CaptureAvanpost(o *Outpost) string
 	//BeatNeutralCreeps()
-	//BeatHeroes()
+	BeatLineCreeps(l *Line) string
 	//BeatTower()
 }
 type Place interface{
 	Accept (v Visitor1) string
 }
-type Hero struct{
-	isRadient string
-}
-func (h *Hero) BuyInMainShop(m *MainShop) string {
+
+func (h *heroBuilder) BuyInMainShop(m *MainShop) string {
 	return m.BuyMain()
 }
-func (h *Hero) BuyInHiddenShop(hi *HiddenShop) string{
+func (h *heroBuilder) BuyInHiddenShop(hi *HiddenShop) string{
 	return hi.BuyHidden()
 }
-func (h *Hero) BuyInSideShop(s *SideShop) string{
+func (h *heroBuilder) BuyInSideShop(s *SideShop) string{
 	return s.BuySide()
 }
-func (h *Hero) CaptureAvanpost(o *Outpost) string{
+func (h *heroBuilder) CaptureAvanpost(o *Outpost) string{
 	return o.OutpostCaptured(*h)
+}
+func (h *heroBuilder) BeatLineCreeps(l *Line) string{
+	return l.BitLine(*h)
 }
 
 type DotaLand struct{
 	place []Place
+
 }
 func (d *DotaLand) Add(s Place){
 	d.place=append(d.place,s)
@@ -61,7 +63,17 @@ func (d *DotaLand) Accept(v Visitor1) string {
 	}
 	return result
 }
-
+type Line struct {
+	isRadiant string
+	line string
+	healthOfCreeps int
+}
+func (l *Line) Accept(v Visitor1) string {
+	return v.BeatLineCreeps(l)
+}
+func (l *Line) BitLine(heroBuilder) string {
+	return "bit " + l.isRadiant +" "+l.line+" line \n"
+}
 type MainShop struct {
 	isRadiant string
 }
@@ -111,8 +123,8 @@ func (o *Outpost) Accept(v Visitor1) string {
 }
 
 
-func (o *Outpost) OutpostCaptured(h Hero) string {
-	if h.isRadient==o.isRadiant{
+func (o *Outpost) OutpostCaptured(h heroBuilder) string {
+	if h.hero.isRadiant==o.isRadiant{
 		return "Outpost on " + o.isRadiant +" side is already captured \n"
 	}else{
 		return "Capture outpost on " + o.isRadiant +" side \n"
@@ -121,20 +133,50 @@ func (o *Outpost) OutpostCaptured(h Hero) string {
 }
 
 func places(){
+	//create axe
+	axe:=heroBuilder{}
+	action:=func(axe *heroBuilder) {
+		axe.Name("Axe").
+			MainAttribute("Strength").
+			Tank(true).
+			Skills([]string{"Berserker's call", "Battle hunger", "Counter helix", "Culling blade"}).
+			Items([]string{"DESOLATOR", "Devine Rapier", "Devine Rapier", "Travel boots", "Devine Rapier", "Devine Rapier"}).
+			IsRadiant("Radiant")
+
+	}
+
+	CreateHero(action)
+	//create io
+	io:=heroBuilder{}
+
+	action2:=func(io *heroBuilder) {
+		io.Name("IO").
+			MainAttribute("Strength").
+			Tank(true).
+			Skills([]string{"Tether", "Spirits", "Spirits Movement", "Overcharge"}).
+			Items([]string{"DESOLATOR", "Devine Rapier", "Devine Rapier", "Travel boots", "Devine Rapier", "Devine Rapier"}).
+			IsRadiant("Dire")
+
+	}
+
+	CreateHero(action2)
+
+
+
 	dotaland := new(DotaLand)
 
 	dotaland.Add(&MainShop{"Radiant"})
 	dotaland.Add(&HiddenShop{"Radiant"})
-	dotaland.Add(&SideShop{"Radiant"})
+	//dotaland.Add(&SideShop{"Radiant"})
 	dotaland.Add(&MainShop{"Dire"})
 	dotaland.Add(&HiddenShop{"Dire"})
-	dotaland.Add(&SideShop{"Dire"})
+	//dotaland.Add(&SideShop{"Dire"})
 	dotaland.Add(&Outpost{"Radiant"})
 	dotaland.Add(&Outpost{"Dire"})
-
-	Axe:=dotaland.Accept(&Hero{"Radiant"})
+	dotaland.Add(&Line{"Radiant","Mid",0})
+	Axe:=dotaland.Accept(&axe)
 	fmt.Println("Axe\n"+Axe)
-	Io:=dotaland.Accept(&Hero{"Dire"})
+	Io:=dotaland.Accept(&io)
 	fmt.Println("Io\n"+Io)
 
 

@@ -13,7 +13,8 @@ func(c *Creep) appear(creep *Creep){
 }
 func(c *Creep) creepGo(creep *Creep){
 	if creep.NameArmy != "Neutrals" {
-		fmt.Println(creep.NameArmy + " " + creep.Group + " go to kill")
+
+		fmt.Println(creep.NameArmy + " " + creep.Group + " go to line\n")
 	}
 }
 type BountyRune struct{
@@ -42,16 +43,24 @@ func (g *gameStart) BountyActivity() {
 func startGame(){
 	//dire
 	direCreepsFactory:= NewCreepsFactory("Dire",true)
-	direCreepsBlyshniki:=direCreepsFactory("ближний",3)
-	direCreepsDalniki:=direCreepsFactory("дальний",1)
+	direCreepsBlyshniki:=direCreepsFactory("ближний",3,10,2,150)
+	direCreepsDalniki:=direCreepsFactory("дальний",1,12,0,100)
+
 	//radiant
 	radiantCreepsFactory:= NewCreepsFactory("Radiant",true)
-	radiantCreepsBlyshniki:=radiantCreepsFactory("ближний",3)
-	radiantCreepsDalniki:=radiantCreepsFactory("дальний",1)
+	radiantCreepsBlyshniki:=radiantCreepsFactory("ближний",3,10,2,150)
+	radiantCreepsDalniki:=radiantCreepsFactory("дальний",1,12,0,100)
+	//neutrals
+	neutralCreepsFactory1:= NewCreepsFactory("Neutrals",true)
+	neutralCreepsWolfs:=neutralCreepsFactory1("волк",2,8,2,150)
+	neutralCreepsVozhak:=neutralCreepsFactory1("вожак",1,13,3,200)
+
 	start := GameStartFacade()
 	start.CreepsActivity(direCreepsBlyshniki)
 	start.CreepsActivity(direCreepsDalniki)
 	start.CreepsActivity(radiantCreepsBlyshniki)
 	start.CreepsActivity(radiantCreepsDalniki)
+	start.CreepsActivity(neutralCreepsWolfs)
+	start.CreepsActivity(neutralCreepsVozhak)
 	start.BountyActivity()
 }

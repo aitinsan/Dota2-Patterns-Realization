@@ -3,96 +3,132 @@ package main
 import "fmt"
 
 type hero struct {
-	name, mainAttribute string
-	skills []string
-	items []string
-	backPack [2]string
-	hiddenItems [5]string
-	farm, support, tank,carry bool
+	name, mainAttribute        string
+	
+	skills                     []string
+	items                      []string
+	backPack                   [2]string
+	hiddenItems                [5]string
+	farm, support, tank, carry bool
+	isRadiant                  string
+	Attack					   int
+	Defence					   int
+	Health					   int
 }
 type heroBuilder struct{
 	hero hero
 }
-func (value *heroBuilder) Name(name string) *heroBuilder{
+
+
+
+func (h *heroBuilder) Name(name string) *heroBuilder{
 	fmt.Println(name)
 
-	value.hero.name= name
-	return value
+	h.hero.name= name
+	return h
 }
-func (value *heroBuilder) MainAttribute(mainAttribute string) *heroBuilder{
+func (h *heroBuilder) IsRadiant(isRadiant string) *heroBuilder{
+	fmt.Println(isRadiant+"\n")
+	h.hero.isRadiant= isRadiant
+	return h
+
+}
+func (h *heroBuilder) MainAttribute(mainAttribute string) *heroBuilder{
 	fmt.Println(mainAttribute)
-	value.hero.mainAttribute= mainAttribute
-	return value
+	h.hero.mainAttribute= mainAttribute
+	return h
 
 }
-func (value *heroBuilder) Skills(skills []string) *heroBuilder{
+func (h *heroBuilder) Skills(skills []string) *heroBuilder{
 	fmt.Println(skills)
-	value.hero.skills= skills
-	return value
+	h.hero.skills= skills
+	return h
 
 }
-func (value *heroBuilder) Items(items []string) *heroBuilder{
+func (h *heroBuilder) Items(items []string) *heroBuilder{
 
 	fmt.Println(items)
-	value.hero.items= items
-	return value
+	h.hero.items= items
+	return h
 
 }
-func (value *heroBuilder) HiddenItems(hiddenItems [5]string) *heroBuilder{
+func (h *heroBuilder) HiddenItems(hiddenItems [5]string) *heroBuilder{
 	fmt.Println(hiddenItems)
-	value.hero.hiddenItems= hiddenItems
-	return value
+	h.hero.hiddenItems= hiddenItems
+	return h
 
 }
-func (value *heroBuilder) BackPack(backPack [2]string) *heroBuilder{
+func (h *heroBuilder) BackPack(backPack [2]string) *heroBuilder{
 	fmt.Println(backPack)
-	value.hero.backPack= backPack
-	return value
+	h.hero.backPack= backPack
+	return h
 
 }
-func (value *heroBuilder) Farm(farm bool) *heroBuilder{
+func (h *heroBuilder) Farm(farm bool) *heroBuilder{
 	fmt.Println(farm)
-	value.hero.farm= farm
-	return value
+	h.hero.farm= farm
+	return h
 
 }
-func (value *heroBuilder) Carry(carry bool) *heroBuilder{
+func (h *heroBuilder) Carry(carry bool) *heroBuilder{
 	fmt.Println(carry)
-	value.hero.carry= carry
-	return value
+	h.hero.carry= carry
+	return h
 
 }
-func (value *heroBuilder) Support(support bool) *heroBuilder{
+func (h *heroBuilder) Support(support bool) *heroBuilder{
 	fmt.Println(support)
-	value.hero.support = support
-	return value
+	h.hero.support = support
+	return h
 
 }
-func (value *heroBuilder) Tank(tank bool) *heroBuilder{
+func (h *heroBuilder) Tank(tank bool) *heroBuilder{
 	fmt.Println(tank)
-	value.hero.tank = tank
-	return value
+	h.hero.tank = tank
+	return h
+}
+func (h *heroBuilder) Attack(attack int) *heroBuilder{
+	fmt.Println(attack)
+	h.hero.Attack = attack
+	return h
+}
+func (h *heroBuilder) Defence(defence int) *heroBuilder{
+	fmt.Println(defence)
+	h.hero.Defence = defence
+	return h
+}
+func (h *heroBuilder) Health(health int) *heroBuilder{
+	fmt.Println(health)
+	h.hero.Health = health
+	return h
 }
 func createHero(hero *hero) {
 
 }
 type build func(builder *heroBuilder)
 func CreateHero(action build)  {
-
 	builder :=heroBuilder{}
-
 	action(&builder)
 	createHero(&builder.hero)
-}
-func axehero(){
 
-	CreateHero(func(value *heroBuilder) {
-		value.Name("Axe").
+}
+
+func axehero(){
+	axe:=heroBuilder{}
+
+	action:=func(axe *heroBuilder) {
+		axe.Name("Axe").
 			MainAttribute("Strength").
 			Tank(true).
 			Skills([]string{"Berserker's call", "Battle hunger", "Counter helix", "Culling blade"}).
-			Items([]string{"DESOLATOR", "Devine Rapier", "Devine Rapier", "Travel boots", "Devine Rapier"})
+			Items([]string{"DESOLATOR", "Devine Rapier", "Devine Rapier", "Travel boots", "Devine Rapier", "Devine Rapier"}).
+			IsRadiant("Radiant").
+			Health(1000).
+			Attack(50).
+			Defence(10)
 
-	})
 
+	}
+	fmt.Println(axe)
+	CreateHero(action)
 }
