@@ -15,8 +15,9 @@ type hero struct {
 	Defence					   int
 	Health					   int
 }
-type heroBuilder struct{
-	hero hero
+type heroBuilder struct {
+	hero   hero
+
 }
 
 
@@ -28,7 +29,7 @@ func (h *heroBuilder) Name(name string) *heroBuilder{
 	return h
 }
 func (h *heroBuilder) IsRadiant(isRadiant string) *heroBuilder{
-	fmt.Println(isRadiant+"\n")
+	fmt.Println(isRadiant)
 	h.hero.isRadiant= isRadiant
 	return h
 
@@ -94,6 +95,7 @@ func (h *heroBuilder) Attack(attack int) *heroBuilder{
 }
 func (h *heroBuilder) Defence(defence int) *heroBuilder{
 	fmt.Println(defence)
+	fmt.Println("\n")
 	h.hero.Defence = defence
 	return h
 }
@@ -114,7 +116,8 @@ func CreateHero(action build)  {
 }
 
 func axehero(){
-	axe:=heroBuilder{}
+
+
 
 	action:=func(axe *heroBuilder) {
 		axe.Name("Axe").
@@ -129,6 +132,6 @@ func axehero(){
 
 
 	}
-	fmt.Println(axe)
+
 	CreateHero(action)
 }

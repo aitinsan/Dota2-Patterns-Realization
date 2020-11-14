@@ -43,13 +43,13 @@ func (g *gameStart) BountyActivity() {
 func startGame(){
 	//dire
 	direCreepsFactory:= NewCreepsFactory("Dire",true)
-	direCreepsBlyshniki:=direCreepsFactory("ближний",3,10,2,150)
-	direCreepsDalniki:=direCreepsFactory("дальний",1,12,0,100)
+	direCreepsBlyshniki:=direCreepsFactory("ближний крип",3,10,2,150)
+	direCreepsDalniki:=direCreepsFactory("дальний крип",1,12,0,100)
 
 	//radiant
 	radiantCreepsFactory:= NewCreepsFactory("Radiant",true)
-	radiantCreepsBlyshniki:=radiantCreepsFactory("ближний",3,10,2,150)
-	radiantCreepsDalniki:=radiantCreepsFactory("дальний",1,12,0,100)
+	radiantCreepsBlyshniki:=radiantCreepsFactory("ближний крип",3,10,2,150)
+	radiantCreepsDalniki:=radiantCreepsFactory("дальний крип",1,12,0,100)
 	//neutrals
 	neutralCreepsFactory1:= NewCreepsFactory("Neutrals",true)
 	neutralCreepsWolfs:=neutralCreepsFactory1("волк",2,8,2,150)

@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 /*places now created:
 	Shops--buy:
@@ -22,7 +24,7 @@ type Visitor1 interface{
 	BuyInHiddenShop(h *HiddenShop) string
 	BuyInSideShop(s *SideShop) string
 	CaptureAvanpost(o *Outpost) string
-	//BeatNeutralCreeps()
+	BeatNeutralCreeps(f *Forest) string
 	BeatLineCreeps(l *Line) string
 	//BeatTower()
 }
@@ -30,20 +32,23 @@ type Place interface{
 	Accept (v Visitor1) string
 }
 
-func (h *heroBuilder) BuyInMainShop(m *MainShop) string {
+func (h *hero) BuyInMainShop(m *MainShop) string {
 	return m.BuyMain()
 }
-func (h *heroBuilder) BuyInHiddenShop(hi *HiddenShop) string{
+func (h *hero) BuyInHiddenShop(hi *HiddenShop) string{
 	return hi.BuyHidden()
 }
-func (h *heroBuilder) BuyInSideShop(s *SideShop) string{
+func (h *hero) BuyInSideShop(s *SideShop) string{
 	return s.BuySide()
 }
-func (h *heroBuilder) CaptureAvanpost(o *Outpost) string{
+func (h *hero) CaptureAvanpost(o *Outpost) string{
 	return o.OutpostCaptured(*h)
 }
-func (h *heroBuilder) BeatLineCreeps(l *Line) string{
-	return l.BitLine(*h)
+func (h *hero) BeatLineCreeps(l *Line) string{
+	return l.BitLine()
+}
+func (h *hero) BeatNeutralCreeps(f *Forest) string{
+	return f.BitForest()
 }
 
 type DotaLand struct{
@@ -66,13 +71,29 @@ func (d *DotaLand) Accept(v Visitor1) string {
 type Line struct {
 	isRadiant string
 	line string
-	healthOfCreeps int
+
 }
 func (l *Line) Accept(v Visitor1) string {
 	return v.BeatLineCreeps(l)
 }
-func (l *Line) BitLine(heroBuilder) string {
-	return "bit " + l.isRadiant +" "+l.line+" line \n"
+func (l *Line) BitLine() string {
+
+
+
+	return "\nbit " + l.isRadiant +" "+l.line+" line \n" + "health of creeps together: "
+
+}
+type Forest struct {
+	isRadiant string
+	spot string
+
+}
+func (f *Forest) Accept(v Visitor1) string {
+	return v.BeatNeutralCreeps(f)
+}
+func (f *Forest) BitForest() string {
+
+	return "\nbit " + f.isRadiant +" "+f.spot+" spot in forest \n" + "health of creeps together: "
 }
 type MainShop struct {
 	isRadiant string
@@ -119,15 +140,18 @@ type Outpost struct {
 
 
 func (o *Outpost) Accept(v Visitor1) string {
+
 	return v.CaptureAvanpost(o)
 }
 
 
-func (o *Outpost) OutpostCaptured(h heroBuilder) string {
-	if h.hero.isRadiant==o.isRadiant{
+func (o *Outpost) OutpostCaptured(h hero) string {
+	fmt.Println(h.Attack)
+	if h.isRadiant==o.isRadiant{
 		return "Outpost on " + o.isRadiant +" side is already captured \n"
 	}else{
-		return "Capture outpost on " + o.isRadiant +" side \n"
+		o.isRadiant=h.isRadiant
+		return h.name+" Capture outpost on " + o.isRadiant +" side \n"
 	}
 
 }
@@ -173,10 +197,11 @@ func places(){
 	//dotaland.Add(&SideShop{"Dire"})
 	dotaland.Add(&Outpost{"Radiant"})
 	dotaland.Add(&Outpost{"Dire"})
-	dotaland.Add(&Line{"Radiant","Mid",0})
-	Axe:=dotaland.Accept(&axe)
+	dotaland.Add(&Line{"Radiant","Mid"})
+
+	Axe:=dotaland.Accept(&axe.hero)
 	fmt.Println("Axe\n"+Axe)
-	Io:=dotaland.Accept(&io)
+	Io:=dotaland.Accept(&io.hero)
 	fmt.Println("Io\n"+Io)
 
 
