@@ -80,7 +80,7 @@ func (l *Line) BitLine() string {
 
 
 
-	return "\nbit " + l.isRadiant +" "+l.line+" line \n" + "health of creeps together: "
+	return "\nbit " + l.isRadiant +" "+l.line+" line \n"
 
 }
 type Forest struct {
@@ -93,7 +93,7 @@ func (f *Forest) Accept(v Visitor1) string {
 }
 func (f *Forest) BitForest() string {
 
-	return "\nbit " + f.isRadiant +" "+f.spot+" spot in forest \n" + "health of creeps together: "
+	return "\nbit " + f.isRadiant +" "+f.spot+" spot in forest \n"
 }
 type MainShop struct {
 	isRadiant string
@@ -146,7 +146,7 @@ func (o *Outpost) Accept(v Visitor1) string {
 
 
 func (o *Outpost) OutpostCaptured(h hero) string {
-	fmt.Println(h.Attack)
+
 	if h.isRadiant==o.isRadiant{
 		return "Outpost on " + o.isRadiant +" side is already captured \n"
 	}else{
